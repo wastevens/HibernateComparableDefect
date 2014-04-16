@@ -54,24 +54,32 @@ public class Foo implements Comparable<Foo> {
     public String toString() {
         return "Foo[id: " + id + ", name: " + name +", deletedAt: " + deletedAt +"]";
     }
-    
-    @Override
-    public int compareTo(Foo that) {
-        Function<Foo, Date> byDeletedTimestamp = new Function<Foo, Date>() {
-            @Override
-            public Date apply(Foo t) {
-                return t.deletedAt;
-            }
-        };
-        Function<Foo, String> byName = new Function<Foo, String>() {
-            @Override
-            public String apply(Foo t) {
-                return t.name;
-            }
-        };
-        return Comparator.comparing(byDeletedTimestamp, Comparator.nullsFirst(Comparator.naturalOrder())).
-                      thenComparing(Comparator.comparing(byName)).
-                      compare(this, that);
-    }
 
+//  Failure not manifest    
+//  @Override
+//  public int compareTo(Foo that) {
+//      Function<Foo, Date> byDeletedTimestamp = ((Foo f) -> f.deletedAt);
+//      Function<Foo, String> byName = ((Foo f) -> f.name);
+//      return Comparator.comparing(byDeletedTimestamp, Comparator.nullsFirst(Comparator.naturalOrder())).
+//              thenComparing(Comparator.comparing(byName)).
+//              compare(this, that);
+//  }
+    
+//  Failure manifest
+  @Override
+  public int compareTo(Foo that) {
+      Function<Foo, String> byName = ((Foo f) -> f.name);
+      return Comparator.comparing(((Foo f) -> f.deletedAt), Comparator.nullsFirst(Comparator.naturalOrder())).
+                    thenComparing(Comparator.comparing(byName)).
+                    compare(this, that);
+  }
+
+//  Failure manifest
+//  @Override
+//  public int compareTo(Foo that) {
+//      Function<Foo, Date> byDeletedTimestamp = ((Foo f) -> f.deletedAt);
+//      return Comparator.comparing(byDeletedTimestamp, Comparator.nullsFirst(Comparator.naturalOrder())).
+//              thenComparing(Comparator.comparing(((Foo f) -> f.name))).
+//              compare(this, that);
+//  }  
 }
