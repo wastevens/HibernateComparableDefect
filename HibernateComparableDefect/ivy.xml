@@ -1,0 +1,19 @@
+<ivy-module version="2.0">
+    <info organisation="com.dstevens" module="${project.name}" revision="${version.major}.${version.minor}.${version.revision}"/>
+    <configurations>
+      <conf name="default" description="binary jars"/>
+      <conf name="sources" visibility="public"/>
+      <conf name="javadoc" visibility="public"/>
+      <conf name="testDefault" visibility="private"/>
+      <conf name="testSources" visibility="private"/>
+      <conf name="testJavadoc" visibility="private"/>
+    </configurations>
+    <publications>
+      <artifact name="${project.name}" conf="default"/>
+      <artifact name="${project.name}-sources" type="source" ext="jar" conf="sources"/>
+    </publications>
+    <dependencies>
+        <dependency org="org.hibernate" name="hibernate-core" rev="4.3.5.Final" conf="default;sources;javadoc"/>
+    	<dependency org="org.springframework.data" name="spring-data-jpa" rev="1.5.1.RELEASE" conf="default;sources;javadoc"/>
+    </dependencies>
+</ivy-module>
